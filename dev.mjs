@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-if (process.argv.includes('--memory')) process.env.AIRUN_MEMORY = '1';
+if (process.argv.includes('--memory')) process.env.AIHR_MEMORY = '1';
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml' };
 
 http.createServer(async (req, res) => {
@@ -26,4 +26,4 @@ http.createServer(async (req, res) => {
     res.setHeader('content-type', types[path.extname(f)] || 'application/octet-stream');
     fs.createReadStream(f).pipe(res);
   } catch (e) { res.statusCode = 500; res.end(String(e.stack || e)); }
-}).listen(Number(process.env.PORT || 8804), () => console.log('airun dev on', process.env.PORT || 8798));
+}).listen(Number(process.env.PORT || 8804), () => console.log('aihr dev on', process.env.PORT || 8798));
