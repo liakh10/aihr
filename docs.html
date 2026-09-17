@@ -7,8 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="How AI Labyrinth works: the maze in the contract, the twelve stations, the move format, the judge, and what it refuses.">
 <link rel="icon" href="/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Azeret+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080b09;--panel:#0d1210;--line:#1d2a22;--ink:#e8f3ea;--dim:#7f9486;--em:#3ddc7a;--m:ui-monospace,"SF Mono","Cascadia Mono","DejaVu Sans Mono",Menlo,Consolas,monospace}
+:root{--bg:#07090f;--panel:#0f1320;--line:#1f2740;--ink:#f1eee6;--dim:#8d94ab;--em:#ffb02e;--m:'Azeret Mono',ui-monospace,Menlo,monospace}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.65 var(--m);-webkit-font-smoothing:antialiased}
@@ -25,11 +27,11 @@ nav.toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--line)}
 nav.toc a{display:block;padding:4px 0 4px 12px;margin-left:-1px;border-left:2px solid transparent;color:var(--dim);text-decoration:none;font-size:12.5px}
 nav.toc a.on{color:var(--em);border-left-color:var(--em)}
 main{padding:30px 0 80px;min-width:0}
-h1{margin:0 0 8px;font-size:clamp(28px,4vw,42px);letter-spacing:-.02em;line-height:1.1;font-weight:600}
+h1{margin:0 0 8px;font-family:'Chakra Petch',sans-serif;font-size:clamp(28px,4vw,44px);letter-spacing:.01em;line-height:1.05;font-weight:700;text-transform:uppercase}
 .lede{color:var(--dim);max-width:64ch;margin:0 0 24px;font-size:14.5px}
 section{scroll-margin-top:76px;padding:22px 0;border-top:1px solid var(--line)}
 section:first-of-type{border-top:0;padding-top:0}
-h2{margin:0 0 10px;font-size:20px;letter-spacing:-.01em;font-weight:600}
+h2{margin:0 0 10px;font-family:'Chakra Petch',sans-serif;font-size:20px;letter-spacing:.02em;font-weight:700;text-transform:uppercase}
 h3{margin:16px 0 6px;font-size:13px;font-weight:600;color:var(--em)}
 p{margin:0 0 10px;max-width:70ch;color:#c9d6cc}
 ul{margin:0 0 10px;padding-left:18px;max-width:70ch;color:#c9d6cc}
@@ -104,7 +106,7 @@ submit(bytes moves) returns (uint256 index)</pre>
 </section>
 
 <section id="engine"><h2>The engine</h2>
-<p>A raycaster in plain JavaScript on a canvas. The wall textures are arithmetic, the plaques are text drawn on the fly, the sounds are synthesized. There are no asset files. On a desktop, click the view to capture the mouse; W A S D move and turn, Q E strafe. On a phone, the left half of the view moves and the right half turns. The minimap shows only the cells you have walked.</p>
+<p>A raycaster in plain JavaScript on a canvas. The wall textures are arithmetic and change with the era of the corridor you are in: riveted steel and dials for the fifties, circuit board for the eighties and nineties, server racks with lamps for the twenties. The floor is tiled and the ceiling carries a lamp every cell, both cast per row. The plaques are drawn on the fly with the Pons mark, the sounds are synthesized. The only image file is the Pons mark. On a desktop, click the view to capture the mouse; W A S D move and turn, Q E strafe. On a phone, the left half of the view moves and the right half turns. The minimap shows only the cells you have walked.</p>
 </section>
 
 <section id="contract"><h2>Contract</h2>

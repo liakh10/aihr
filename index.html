@@ -8,97 +8,117 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="/assets/favicon.png">
 <link rel="apple-touch-icon" href="/assets/apple-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Azeret+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080b09;--panel:#0d1210;--panel2:#111815;--line:#1d2a22;--ink:#e8f3ea;--dim:#7f9486;--em:#3ddc7a;--em2:#0f2a1b;--amber:#ffb02e;--bad:#ff7b66;--m:ui-monospace,"SF Mono","Cascadia Mono","DejaVu Sans Mono",Menlo,Consolas,monospace}
+:root{--bg:#07090f;--bg2:#0b0e17;--panel:#0f1320;--panel2:#141a2b;--line:#1f2740;--ink:#f1eee6;--dim:#8d94ab;--am:#ffb02e;--am2:#2a1f0a;--hot:#ff5c3a;--good:#5ce39a;
+  --d:'Chakra Petch',-apple-system,BlinkMacSystemFont,sans-serif;--m:'Azeret Mono',ui-monospace,Menlo,monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font:14px/1.6 var(--m);-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font:13.5px/1.6 var(--m);-webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(rgba(255,176,46,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,176,46,.035) 1px,transparent 1px);background-size:48px 48px}
 a{color:inherit;text-decoration:none}
 button,input{font:inherit;color:inherit}
-.in{width:min(1080px,100%);margin:0 auto;padding:0 clamp(16px,3vw,28px)}
-.top{position:sticky;top:0;z-index:20;background:rgba(8,11,9,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.top .in{display:flex;align-items:center;gap:18px;height:52px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px}
-.logo i{width:14px;height:14px;border:2px solid var(--em);border-radius:2px;display:block;position:relative}
-.logo i:after{content:"";position:absolute;left:3px;top:3px;width:4px;height:4px;background:var(--em)}
-.top nav{display:flex;gap:16px;color:var(--dim);font-size:12.5px}
-.top nav a:hover{color:var(--ink)}
+.in{width:min(1120px,100%);margin:0 auto;padding:0 clamp(16px,3vw,28px)}
+.top{position:sticky;top:0;z-index:20;background:rgba(7,9,15,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .in{display:flex;align-items:center;gap:18px;height:56px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--d);font-weight:700;font-size:17px;letter-spacing:.02em;text-transform:uppercase}
+.logo i{width:18px;height:18px;border:2px solid var(--am);display:block;position:relative;transform:rotate(45deg)}
+.logo i:after{content:"";position:absolute;left:4px;top:4px;width:6px;height:6px;background:var(--am)}
+.top nav{display:flex;gap:16px;color:var(--dim);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.top nav a:hover{color:var(--am)}
 .sp{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:34px;padding:0 13px;border-radius:3px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:12.5px;white-space:nowrap}
-.btn:hover{border-color:var(--em)}
-.btn.em{background:var(--em);border-color:var(--em);color:#06200f;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 14px;border-radius:2px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-family:var(--d);font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;transition:border-color .12s,transform .08s}
+.btn:hover{border-color:var(--am)}
+.btn:active{transform:translateY(1px)}
+.btn.em{background:var(--am);border-color:var(--am);color:#1a1205}
 .btn:disabled{opacity:.4;cursor:default}
 .btn img{width:14px;height:14px}
 .btn.em img{filter:brightness(0)}
 /* hero */
-.hero{padding:clamp(40px,7vw,84px) 0 clamp(20px,3vw,32px)}
-.kicker{font-size:11px;letter-spacing:.18em;color:var(--em);text-transform:uppercase;margin-bottom:16px}
-h1{font-size:clamp(30px,5vw,54px);line-height:1.08;letter-spacing:-.02em;font-weight:600;max-width:20ch}
-h1 em{font-style:normal;color:var(--em)}
-.lead{margin-top:18px;color:var(--dim);max-width:66ch;font-size:14.5px}
+.hero{padding:clamp(36px,6vw,72px) 0 clamp(18px,3vw,28px);display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,360px);gap:clamp(20px,4vw,48px);align-items:end}
+.kicker{font-size:11px;letter-spacing:.22em;color:var(--am);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.kicker:before{content:"";width:28px;height:2px;background:var(--am)}
+h1{font-family:var(--d);font-size:clamp(38px,6.4vw,78px);line-height:.98;letter-spacing:-.01em;font-weight:700;text-transform:uppercase;max-width:14ch}
+h1 em{font-style:normal;color:var(--am)}
+.lead{margin-top:18px;color:var(--dim);max-width:60ch;font-size:13.5px}
 .lead b{color:var(--ink);font-weight:500}
 .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+/* the console card on the right of the hero */
+.console{border:1px solid var(--line);background:var(--panel);border-radius:2px;padding:16px;display:grid;gap:10px;position:relative;overflow:hidden}
+.console:before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--am)}
+.console .r{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.console .r:last-child{border-bottom:0}
+.console .r span{color:var(--dim)}
+.console .r b{font-weight:500;text-align:right;word-break:break-all;color:var(--ink)}
+.console .r b.am{color:var(--am)}
 /* contract strip */
-.strip{margin-top:22px;border:1px solid var(--line);border-radius:3px;background:var(--panel);display:flex;align-items:center;gap:14px;padding:10px 14px;flex-wrap:wrap;font-size:12.5px}
-.strip .k{color:var(--em);letter-spacing:.12em;font-size:11px;text-transform:uppercase}
+.strip{margin-top:10px;border:1px solid var(--line);border-radius:2px;background:var(--panel);display:flex;align-items:center;gap:14px;padding:10px 14px;flex-wrap:wrap;font-size:12px}
+.strip .k{color:var(--am);letter-spacing:.14em;font-size:11px;text-transform:uppercase;font-family:var(--d);font-weight:600}
 .strip .v{word-break:break-all}
 .strip .sp{flex:1}
-/* the game */
+/* sections */
 section{padding:clamp(22px,4vw,40px) 0}
-.h{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;flex-wrap:wrap}
-.h h2{font-size:20px;font-weight:600;letter-spacing:-.01em}
+.h{display:flex;align-items:baseline;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.h h2{font-family:var(--d);font-size:24px;font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+.h h2:before{content:"// ";color:var(--am)}
 .h small{color:var(--dim);font-size:12px}
 .h .sp{flex:1}
-.h .src{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
-.h .src.chain{color:var(--em)}
-.game{border:1px solid var(--line);border-radius:3px;background:#000;overflow:hidden;position:relative}
+.h .src{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.h .src.chain{color:var(--good)}
+/* the game */
+.game{border:1px solid var(--line);border-radius:2px;background:#000;overflow:hidden;position:relative;box-shadow:0 0 0 1px rgba(255,176,46,.08),0 30px 60px rgba(0,0,0,.5)}
 .game canvas{display:block;width:100%;aspect-ratio:16/9;image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none;cursor:crosshair}
 .hud{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:var(--panel)}
-.hud div{padding:10px 14px;border-right:1px solid var(--line);font-size:12px;color:var(--dim)}
+.hud div{padding:10px 14px;border-right:1px solid var(--line);font-size:11px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
 .hud div:last-child{border-right:0}
-.hud b{display:block;font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:500}
-.hud b.em{color:var(--em)}
+.hud b{display:block;font-family:var(--d);font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:700;letter-spacing:0;text-transform:none}
+.hud b.em{color:var(--am)}
 .gtools{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;font-size:12px;color:var(--dim)}
-/* finish panel */
-.finish{margin-top:12px;border:1px solid var(--em);border-radius:3px;background:var(--panel);padding:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+.finish{margin-top:12px;border:1px solid var(--am);border-radius:2px;background:linear-gradient(90deg,var(--am2),var(--panel));padding:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
 .finish[hidden]{display:none}
-.finish h3{font-size:15px;font-weight:600;color:var(--em)}
+.finish h3{font-family:var(--d);font-size:18px;font-weight:700;color:var(--am);text-transform:uppercase}
 .finish p{color:var(--dim);font-size:12.5px;margin-top:4px}
 .finish .acts{margin-top:10px}
 .msg{font-size:12.5px;margin-top:8px;min-height:16px;word-break:break-word}
-.ok{color:var(--em)}.bad{color:var(--bad)}.warn{color:var(--amber)}
-/* stations */
-.stations{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.st{border:1px solid var(--line);border-radius:3px;background:var(--panel);padding:12px 14px;min-width:0}
-.st .y{font-size:22px;font-weight:600;color:var(--dim);letter-spacing:-.01em}
-.st.on .y{color:var(--em)}
+.ok{color:var(--good)}.bad{color:var(--hot)}.warn{color:var(--am)}
+/* stations as a rail */
+.rail{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.rail:before{content:"";position:absolute;left:0;right:0;top:22px;height:2px;background:linear-gradient(90deg,var(--am),var(--line));opacity:.6}
+.st{position:relative;padding-top:38px;min-width:0}
+.st .dot{position:absolute;left:0;top:14px;width:18px;height:18px;border:2px solid var(--line);background:var(--bg);transform:rotate(45deg)}
+.st.on .dot{border-color:var(--am);background:var(--am)}
+.st .y{font-family:var(--d);font-size:26px;font-weight:700;color:var(--dim);letter-spacing:-.01em}
+.st.on .y{color:var(--am)}
 .st .t{font-size:12.5px;margin-top:2px;color:var(--ink)}
 .st .n{font-size:11.5px;color:var(--dim);margin-top:4px}
-.st .c{font-size:10.5px;color:var(--dim);margin-top:6px;letter-spacing:.08em}
+.st .c{font-size:10.5px;color:var(--dim);margin-top:6px;letter-spacing:.1em;text-transform:uppercase}
 /* hall */
-.hall{border:1px solid var(--line);border-radius:3px;background:var(--panel);overflow:hidden}
+.hall{border:1px solid var(--line);border-radius:2px;background:var(--panel);overflow:hidden}
 .row{display:grid;grid-template-columns:52px 1fr 90px 100px;gap:12px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:12.5px;align-items:center}
 .row:last-child{border-bottom:0}
-.row.head{color:var(--dim);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-.row .r{color:var(--em)}
+.row.head{color:var(--dim);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.row .r{color:var(--am)}
 .row .steps{font-variant-numeric:tabular-nums;text-align:right}
 .row .t{color:var(--dim);text-align:right;font-size:11.5px}
 .empty{padding:22px;text-align:center;color:var(--dim);font-size:12.5px}
 .rec{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:10px;font-size:12.5px;color:var(--dim)}
 .rec b{color:var(--ink);font-weight:500}
 /* how */
-.how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.cell{border:1px solid var(--line);border-radius:3px;background:var(--panel);padding:16px}
-.cell h3{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--em)}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cell{border:1px solid var(--line);border-radius:2px;background:var(--panel);padding:16px;position:relative}
+.cell:before{content:attr(data-n);position:absolute;right:14px;top:10px;font-family:var(--d);font-size:28px;font-weight:700;color:var(--line)}
+.cell h3{font-family:var(--d);font-size:15px;font-weight:700;margin-bottom:6px;color:var(--am);text-transform:uppercase;letter-spacing:.04em}
 .cell p{color:var(--dim);font-size:12.5px}
 .cell code{color:var(--ink);background:var(--panel2);padding:1px 5px;border-radius:2px;font-size:12px}
-.refuse{margin-top:8px;border:1px solid var(--line);border-radius:3px;background:var(--panel)}
+.refuse{margin-top:10px;border:1px solid var(--line);border-radius:2px;background:var(--panel)}
 .refuse div{display:grid;grid-template-columns:150px 1fr;gap:12px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:12.5px}
 .refuse div:last-child{border-bottom:0}
-.refuse span{color:var(--bad);letter-spacing:.06em;font-size:11px;text-transform:uppercase;padding-top:2px}
+.refuse span{color:var(--hot);letter-spacing:.1em;font-size:11px;text-transform:uppercase;padding-top:2px;font-family:var(--d);font-weight:600}
 /* proof */
-.proof{border:1px solid var(--line);border-radius:3px;background:var(--panel);padding:18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
-.proof h2{font-size:18px;font-weight:600}
+.proof{border:1px solid var(--line);border-radius:2px;background:var(--panel);padding:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;position:relative;overflow:hidden}
+.proof:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--am)}
+.proof h2{font-family:var(--d);font-size:22px;font-weight:700;text-transform:uppercase}
 .proof p{color:var(--dim);font-size:12.5px;margin-top:4px;max-width:70ch}
 .proof .adr{display:grid;gap:5px;margin-top:12px;font-size:12.5px}
 .proof .adr div{display:flex;gap:10px;flex-wrap:wrap}
@@ -106,16 +126,17 @@ section{padding:clamp(22px,4vw,40px) 0}
 .proof .adr a{word-break:break-all}
 .proof .adr a:hover{text-decoration:underline}
 .proof .ca{word-break:break-all}
-.proof .ca.soon{font-size:28px;font-weight:600;color:var(--em)}
+.proof .ca.soon{font-family:var(--d);font-size:34px;font-weight:700;color:var(--am);text-transform:uppercase}
 .proof .acts{display:grid;gap:6px;margin:0}
 footer{padding:22px 0 44px;color:var(--dim);font-size:12px;border-top:1px solid var(--line);margin-top:16px}
 footer .in{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
-.md{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6);display:none;place-items:center;padding:16px}
+.md{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.65);display:none;place-items:center;padding:16px}
 .md.on{display:grid}
-.mdin{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:16px;width:min(360px,100%);display:grid;gap:6px}
-.mdin button{display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;border:1px solid var(--line);border-radius:3px;background:var(--bg);cursor:pointer;text-align:left}
+.mdin{background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:16px;width:min(360px,100%);display:grid;gap:6px}
+.mdin button{display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;border:1px solid var(--line);border-radius:2px;background:var(--bg);cursor:pointer;text-align:left}
 .mdin button img{width:20px;height:20px;border-radius:3px}
-@media (max-width:860px){.stations{grid-template-columns:1fr 1fr}.how{grid-template-columns:1fr}.proof,.finish{grid-template-columns:1fr}.top nav{display:none}.hud{grid-template-columns:1fr 1fr}.hud div:nth-child(2){border-right:0}.row{grid-template-columns:40px 1fr 70px}.row .t{display:none}.refuse div{grid-template-columns:1fr}}
+@media (max-width:900px){.hero{grid-template-columns:1fr}.rail{grid-template-columns:repeat(3,1fr)}.how{grid-template-columns:1fr}.proof,.finish{grid-template-columns:1fr}.top nav{display:none}.hud{grid-template-columns:1fr 1fr}.hud div:nth-child(2){border-right:0}.row{grid-template-columns:40px 1fr 70px}.row .t{display:none}.refuse div{grid-template-columns:1fr}}
+@media (max-width:560px){.rail{grid-template-columns:1fr 1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -130,11 +151,23 @@ footer .in{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
 
 <main class="in">
 <div class="hero">
+  <div>
   <div class="kicker">The maze is in the contract. The contract grades the run.</div>
   <h1>The path AI walked, as a <em>labyrinth</em> the chain checks</h1>
   <p class="lead">A first-person maze with one way through. Along it, twelve stations: <b>1950</b> Turing asks the question, <b>1956</b> Dartmouth names the field, <b>1997</b> Deep Blue, <b>2017</b> the transformer, <b>2022</b> ChatGPT. The map and the stations live in a contract on Robinhood Chain. Your browser reads them out of chain state, you walk, and every cell you cross is a move. At the exit you hand the moves to the contract: it walks them over its own map, refuses a step into a wall or a station out of order, and records you.</p>
   <div class="acts"><a class="btn em" href="#play">Enter the labyrinth</a><a class="btn" href="#how">How it works</a></div>
-  <div class="strip"><span class="k" data-ticker>$AIMAZE</span><span class="k">contract</span><span class="v" id="ca-strip">soon</span><span class="sp"></span><button class="btn" id="copy" style="height:28px">Copy</button><a class="btn" id="ca-explorer" target="_blank" rel="noopener" style="height:28px" hidden>explorer ↗</a></div>
+  </div>
+  <div>
+  <div class="console">
+    <div class="r"><span>grid</span><b>31 × 31 · 961 bytes</b></div>
+    <div class="r"><span>path</span><b>one, 260 moves</b></div>
+    <div class="r"><span>stations</span><b>12 · 1950 → 2022</b></div>
+    <div class="r"><span>judge</span><b class="am">verify(bytes) in the EVM</b></div>
+    <div class="r"><span>finishes</span><b id="c-runs">—</b></div>
+    <div class="r"><span>record</span><b id="c-rec">—</b></div>
+  </div>
+  <div class="strip"><span class="k" data-ticker>$AIMAZE</span><span class="v" id="ca-strip">soon</span><span class="sp"></span><button class="btn" id="copy" style="height:28px">Copy</button><a class="btn" id="ca-explorer" target="_blank" rel="noopener" style="height:28px" hidden>explorer ↗</a></div>
+  </div>
 </div>
 
 <section id="play">
@@ -151,7 +184,7 @@ footer .in{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
 
 <section id="stations">
   <div class="h"><h2>Stations</h2><small>in the order the path passes them</small></div>
-  <div class="stations" id="st-list"></div>
+  <div class="rail" id="st-list"></div>
 </section>
 
 <section id="hall">
@@ -163,9 +196,9 @@ footer .in{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
 <section id="how">
   <div class="h"><h2>How it works</h2></div>
   <div class="how">
-    <div class="cell"><h3>Map</h3><p>31 × 31 cells, one byte each, 961 bytes in contract storage. Carved by a seeded backtracker, so the maze is perfect: exactly one path from the entrance to the exit, no loops. The twelve stations sit on that path, spaced along it, which is why they can only be reached in order.</p></div>
-    <div class="cell"><h3>Moves</h3><p>Each cell you cross is one byte: <code>0</code> up, <code>1</code> right, <code>2</code> down, <code>3</code> left. Wandering into dead ends adds moves. The clean solution is <span id="how-sol">260</span> moves; fewer is impossible.</p></div>
-    <div class="cell"><h3>Judge</h3><p><code>verify(moves)</code> walks the bytes over the stored map inside the EVM and returns whether it finished, how many steps, how many stations were passed and where it stopped. <code>submit(moves)</code> records a finish and a personal best; the fewest steps by anyone is the record. Nothing else is stored.</p></div>
+    <div class="cell" data-n="01"><h3>Map</h3><p>31 × 31 cells, one byte each, 961 bytes in contract storage. Carved by a seeded backtracker, so the maze is perfect: exactly one path from the entrance to the exit, no loops. The twelve stations sit on that path, spaced along it, which is why they can only be reached in order.</p></div>
+    <div class="cell" data-n="02"><h3>Moves</h3><p>Each cell you cross is one byte: <code>0</code> up, <code>1</code> right, <code>2</code> down, <code>3</code> left. Wandering into dead ends adds moves. The clean solution is <span id="how-sol">260</span> moves; fewer is impossible.</p></div>
+    <div class="cell" data-n="03"><h3>Judge</h3><p><code>verify(moves)</code> walks the bytes over the stored map inside the EVM and returns whether it finished, how many steps, how many stations were passed and where it stopped. <code>submit(moves)</code> records a finish and a personal best; the fewest steps by anyone is the record. Nothing else is stored.</p></div>
   </div>
   <div class="refuse">
     <div><span>wall</span><b>A step into a wall or off the edge ends the walk there. The contract tells you the cell.</b></div>
@@ -231,7 +264,7 @@ W.onChange(paintWallet); W.restore().then(paintWallet);
 /* the board and the game */
 let BOARD = null, G = null, RESULT = null, muted = false;
 function paintStations(reached = 0) {
-  $('st-list').innerHTML = BOARD.labels.map((l, i) => `<div class="st ${i < reached ? 'on' : ''}"><div class="y">${esc(l.slice(0, 4))}</div><div class="t">${esc(l.slice(5))}</div><div class="n">${esc(BOARD.notes[i] || '')}</div><div class="c">${i < reached ? 'reached' : 'cell ' + BOARD.checkpoints[i]}</div></div>`).join('');
+  $('st-list').innerHTML = BOARD.labels.map((l, i) => `<div class="st ${i < reached ? 'on' : ''}"><i class="dot"></i><div class="y">${esc(l.slice(0, 4))}</div><div class="t">${esc(l.slice(5))}</div><div class="n">${esc(BOARD.notes[i] || '')}</div><div class="c">${i < reached ? 'reached' : 'cell ' + BOARD.checkpoints[i]}</div></div>`).join('');
   $('h-next').textContent = reached < BOARD.labels.length ? BOARD.labels[reached].slice(0, 4) : 'exit';
 }
 function startGame() {
@@ -242,6 +275,7 @@ function startGame() {
   G = mount($('cv'), BOARD, {
     onStep: s => { $('h-steps').textContent = s.steps; },
     onStation: i => { $('h-st').textContent = (i + 1) + ' / ' + BOARD.labels.length; paintStations(i + 1); },
+    debug: location.search.includes('dev'),
     onFinish: s => { RESULT = s; $('finish').hidden = false; $('f-sum').textContent = `${s.steps} moves, ${L.clock(s.seconds)}, ${s.reached} of ${BOARD.labels.length} stations. The clean path is ${BOARD.solution || 260} moves.`; $('ask').disabled = !L.LABYRINTH; $('submit').disabled = !L.LABYRINTH; if (!L.LABYRINTH) { $('f-msg').className = 'msg warn'; $('f-msg').textContent = 'The contract is not deployed yet, so the chain cannot grade this run. The moves are recorded all the same.'; } }
   });
   G.mute(muted);
@@ -264,6 +298,7 @@ async function hall() {
   try {
     const runs = await L.loadRuns(50);
     const b = BOARD;
+    $('c-runs').textContent = b.source === 'chain' ? b.nRuns : 'not deployed'; $('c-rec').textContent = b.source === 'chain' ? (b.record ? b.record + ' moves' : 'none yet') : '—';
     $('rec').innerHTML = b.source === 'chain' ? `<span>finishes <b>${b.nRuns}</b></span><span>record <b>${b.record || '—'}</b> moves${b.holder ? ' by <b>' + W.short(b.holder) + '</b>' : ''}</span><span>clean path <b>${b.solution || 260}</b></span>` : '';
     $('hall').innerHTML = runs.length ? `<div class="row head"><span>#</span><span>runner</span><span class="steps">moves</span><span class="t">when</span></div>` + runs.map(r => `<div class="row"><span>${r.index + 1}</span><span class="${r.steps === b.record ? 'r' : ''}">${link('address', r.runner, W.short(r.runner))}</span><span class="steps">${r.steps}</span><span class="t">${L.ago(r.time)}</span></div>`).join('') : `<div class="empty">${L.LABYRINTH ? 'nobody has come out yet' : 'the contract is not deployed yet'}</div>`;
   } catch (e) { $('hall').innerHTML = `<div class="empty">could not read the chain: ${esc(e.shortMessage || e.message)}</div>`; }
