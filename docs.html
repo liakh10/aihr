@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <script src="/config.js"></script>
-<title>AI Labyrinth · docs</title>
+<title>AI Runner · docs</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="How AI Labyrinth works: the maze in the contract, the twelve stations, the move format, the judge, and what it refuses.">
+<meta name="description" content="How AI Runner works: the maze in the contract, the twelve stations, the move format, the judge, and what it refuses.">
 <link rel="icon" href="/assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Azeret+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -47,11 +47,11 @@ code{color:var(--em)}
 </style>
 </head>
 <body>
-<header class="top"><div class="in"><a class="logo" href="/"><i></i><span data-name>AI Labyrinth</span></a><a class="l" href="/#play">Play</a><a class="l" href="/docs" style="color:var(--ink)">Docs</a></div></header>
+<header class="top"><div class="in"><a class="logo" href="/"><i></i><span data-name>AI Runner</span></a><a class="l" href="/#play">Play</a><a class="l" href="/docs" style="color:var(--ink)">Docs</a></div></header>
 <div class="page">
-<nav class="toc"><ol><li><a href="#what">What it is</a></li><li><a href="#maze">The maze</a></li><li><a href="#stations">The stations</a></li><li><a href="#moves">Moves</a></li><li><a href="#judge">The judge</a></li><li><a href="#refuse">What it refuses</a></li><li><a href="#hall">The hall</a></li><li><a href="#engine">The engine</a></li><li><a href="#contract">Contract</a></li><li><a href="#token">$AIMAZE</a></li></ol></nav>
+<nav class="toc"><ol><li><a href="#what">What it is</a></li><li><a href="#maze">The maze</a></li><li><a href="#stations">The stations</a></li><li><a href="#moves">Moves</a></li><li><a href="#judge">The judge</a></li><li><a href="#refuse">What it refuses</a></li><li><a href="#hall">The hall</a></li><li><a href="#engine">The engine</a></li><li><a href="#contract">Contract</a></li><li><a href="#token">$AIRUN</a></li></ol></nav>
 <main>
-<h1>How AI Labyrinth works</h1>
+<h1>How AI Runner works</h1>
 <p class="lede">A maze with one way through, whose stations are the history of artificial intelligence, stored in a contract on Robinhood Chain that also grades every run.</p>
 
 <section id="what"><h2>What it is</h2>
@@ -115,7 +115,7 @@ submit(bytes moves) returns (uint256 index)</pre>
 <p>Tested against a fork of Robinhood Chain mainnet: a maze whose entrance is a wall is refused at deployment; the solution verifies; a detour verifies with two more steps; one step short, a step into a wall, off the edge, an unknown move, an empty run, a run starting at the second cell and a run over 6,000 moves are refused; a first finish sets the record; a shorter run takes it; a tie is a personal best but not a record; a rejected submit carries the reason.</p>
 </section>
 
-<section id="token"><h2>$AIMAZE</h2>
+<section id="token"><h2>$AIRUN</h2>
 <p>An ordinary Pons coin on Robinhood Chain. It has no rights over the labyrinth.</p>
 <div class="kv"><div><span>chain</span><b>Robinhood Chain</b></div><div><span>launchpad</span><b>Pons</b></div><div><span>contract</span><b id="ca">soon</b></div></div>
 </section>

@@ -1,4 +1,4 @@
-# AI Labyrinth — $AIMAZE (протокол + игра)
+# AI Runner — $AIRUN (протокол + игра)
 
 Заведён 2026-09-17 по ссылке chainrom.com (x.com/ChainRom_). Пользователь: «что-то по типу лабиринт AI,
 путь, который проходил AI, и самые важные пункты его развития; 3D как там; качественно, но долго».
@@ -32,7 +32,7 @@
 - генератор `contracts/maze.mjs` → `maze.json` (копия в assets/maze.json для сайта и /deploy)
 
 ## Что нужно от пользователя
-- `/deploy` кошельком → `AIMAZE_LABYRINTH` в config.js; Vercel env не нужны (сайт читает публичный RPC)
+- `/deploy` кошельком → `AIRUN_LABYRINTH` в config.js; Vercel env не нужны (сайт читает публичный RPC)
 - Redis/кипер не нужны: зал читается прямо с контракта
 
 ## Отладка

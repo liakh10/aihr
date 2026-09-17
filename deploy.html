@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <script src="/config.js"></script>
-<title>Deploy · AI Labyrinth</title>
+<title>Deploy · AI Runner</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <link rel="icon" href="/assets/favicon.png">
@@ -30,7 +30,7 @@ a{color:var(--em)}
 </style>
 </head>
 <body><div class="in">
-  <h1>Deploy <em>AI Labyrinth</em></h1>
+  <h1>Deploy <em>AI Runner</em></h1>
   <p class="dim" style="margin-top:8px">One contract on Robinhood Chain. The constructor takes the maze from assets/maze.json: 961 bytes of map, the entrance, the exit, twelve station cells and their labels. The deploying wallet gets no rights: there is no owner.</p>
   <div class="card"><div class="row"><button class="btn em" id="connect">Connect wallet</button><span id="who" class="dim"></span></div></div>
   <div class="card"><h2>The maze that will be deployed</h2><pre id="mz">reading assets/maze.json…</pre></div>
@@ -45,8 +45,8 @@ const $ = id => document.getElementById(id), CHAIN = 4663;
 const [LB, M] = await Promise.all([fetch('/lib/abi/Labyrinth.json?v=1').then(r => r.json()), fetch('/assets/maze.json').then(r => r.json())]);
 const labels = M.stations.map(s => s.year + ' ' + s.title);
 $('mz').textContent = `${M.w} x ${M.h} · seed ${M.seed} · entrance ${M.start} · exit ${M.exit} · ${M.solutionMoves} clean moves\nstations ${M.checkpoints.join(' ')}\n${labels.join('\n')}`;
-let S = {}; try { S = JSON.parse(localStorage.getItem('aimaze:deploy') || '{}'); } catch {}
-const save = () => { try { localStorage.setItem('aimaze:deploy', JSON.stringify(S)); } catch {} };
+let S = {}; try { S = JSON.parse(localStorage.getItem('airun:deploy') || '{}'); } catch {}
+const save = () => { try { localStorage.setItem('airun:deploy', JSON.stringify(S)); } catch {} };
 const link = (kind, v) => `<a href="${explorer(CHAIN, kind, v)}" target="_blank" rel="noopener">${v}</a>`;
 async function wait(el, tx) { el.innerHTML = `sent · ${link('tx', tx.hash)} · waiting…`; const rc = await tx.wait(); if (rc.status !== 'success') throw Error('Transaction failed'); return rc; }
 async function paint() {
@@ -54,7 +54,7 @@ async function paint() {
   $('who').textContent = w.address ? W.short(w.address) + ' · chain ' + (w.chainId || '?') : '';
   document.querySelectorAll('[data-step]').forEach(b => b.disabled = !w.address);
   if (S.lab) $('s-lab').innerHTML = link('address', S.lab);
-  $('out').textContent = 'window.AIMAZE_LABYRINTH = "' + (S.lab || '') + '";';
+  $('out').textContent = 'window.AIRUN_LABYRINTH = "' + (S.lab || '') + '";';
 }
 const steps = {
   lab: async el => {
