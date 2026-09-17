@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="/config.js"></script>
+<title>AI Labyrinth</title>
+<meta name="description" content="AI Labyrinth. A first-person maze whose only path is the history of AI, twelve stations from Turing to ChatGPT. The maze lives in a contract on Robinhood Chain and the contract grades your run.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-icon.png">
+<style>
+:root{--bg:#080b09;--panel:#0d1210;--panel2:#111815;--line:#1d2a22;--ink:#e8f3ea;--dim:#7f9486;--em:#3ddc7a;--em2:#0f2a1b;--amber:#ffb02e;--bad:#ff7b66;--m:ui-monospace,"SF Mono","Cascadia Mono","DejaVu Sans Mono",Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:14px/1.6 var(--m);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;color:inherit}
+.in{width:min(1080px,100%);margin:0 auto;padding:0 clamp(16px,3vw,28px)}
+.top{position:sticky;top:0;z-index:20;background:rgba(8,11,9,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .in{display:flex;align-items:center;gap:18px;height:52px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px}
+.logo i{width:14px;height:14px;border:2px solid var(--em);border-radius:2px;display:block;position:relative}
+.logo i:after{content:"";position:absolute;left:3px;top:3px;width:4px;height:4px;background:var(--em)}
+.top nav{display:flex;gap:16px;color:var(--dim);font-size:12.5px}
+.top nav a:hover{color:var(--ink)}
+.sp{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:34px;padding:0 13px;border-radius:3px;border:1px solid var(--line);background:var(--panel);cursor:pointer;font-size:12.5px;white-space:nowrap}
+.btn:hover{border-color:var(--em)}
+.btn.em{background:var(--em);border-color:var(--em);color:#06200f;font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btn img{width:14px;height:14px}
+.btn.em img{filter:brightness(0)}
+/* hero */
+.hero{padding:clamp(40px,7vw,84px) 0 clamp(20px,3vw,32px)}
+.kicker{font-size:11px;letter-spacing:.18em;color:var(--em);text-transform:uppercase;margin-bottom:16px}
+h1{font-size:clamp(30px,5vw,54px);line-height:1.08;letter-spacing:-.02em;font-weight:600;max-width:20ch}
+h1 em{font-style:normal;color:var(--em)}
+.lead{margin-top:18px;color:var(--dim);max-width:66ch;font-size:14.5px}
+.lead b{color:var(--ink);font-weight:500}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+/* contract strip */
+.strip{margin-top:22px;border:1px solid var(--line);border-radius:3px;background:var(--panel);display:flex;align-items:center;gap:14px;padding:10px 14px;flex-wrap:wrap;font-size:12.5px}
+.strip .k{color:var(--em);letter-spacing:.12em;font-size:11px;text-transform:uppercase}
+.strip .v{word-break:break-all}
+.strip .sp{flex:1}
+/* the game */
+section{padding:clamp(22px,4vw,40px) 0}
+.h{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.h h2{font-size:20px;font-weight:600;letter-spacing:-.01em}
+.h small{color:var(--dim);font-size:12px}
+.h .sp{flex:1}
+.h .src{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.h .src.chain{color:var(--em)}
+.game{border:1px solid var(--line);border-radius:3px;background:#000;overflow:hidden;position:relative}
+.game canvas{display:block;width:100%;aspect-ratio:16/9;image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none;cursor:crosshair}
+.hud{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);background:var(--panel)}
+.hud div{padding:10px 14px;border-right:1px solid var(--line);font-size:12px;color:var(--dim)}
+.hud div:last-child{border-right:0}
+.hud b{display:block;font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:500}
+.hud b.em{color:var(--em)}
+.gtools{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;font-size:12px;color:var(--dim)}
+/* finish panel */
+.finish{margin-top:12px;border:1px solid var(--em);border-radius:3px;background:var(--panel);padding:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+.finish[hidden]{display:none}
+.finish h3{font-size:15px;font-weight:600;color:var(--em)}
+.finish p{color:var(--dim);font-size:12.5px;margin-top:4px}
+.finish .acts{margin-top:10px}
+.msg{font-size:12.5px;margin-top:8px;min-height:16px;word-break:break-word}
+.ok{color:var(--em)}.bad{color:var(--bad)}.warn{color:var(--amber)}
+/* stations */
+.stations{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.st{border:1px solid var(--line);border-radius:3px;background:var(--panel);padding:12px 14px;min-width:0}
+.st .y{font-size:22px;font-weight:600;color:var(--dim);letter-spacing:-.01em}
+.st.on .y{color:var(--em)}
+.st .t{font-size:12.5px;margin-top:2px;color:var(--ink)}
+.st .n{font-size:11.5px;color:var(--dim);margin-top:4px}
+.st .c{font-size:10.5px;color:var(--dim);margin-top:6px;letter-spacing:.08em}
+/* hall */
+.hall{border:1px solid var(--line);border-radius:3px;background:var(--panel);overflow:hidden}
+.row{display:grid;grid-template-columns:52px 1fr 90px 100px;gap:12px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:12.5px;align-items:center}
+.row:last-child{border-bottom:0}
+.row.head{color:var(--dim);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.row .r{color:var(--em)}
+.row .steps{font-variant-numeric:tabular-nums;text-align:right}
+.row .t{color:var(--dim);text-align:right;font-size:11.5px}
+.empty{padding:22px;text-align:center;color:var(--dim);font-size:12.5px}
+.rec{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:10px;font-size:12.5px;color:var(--dim)}
+.rec b{color:var(--ink);font-weight:500}
+/* how */
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cell{border:1px solid var(--line);border-radius:3px;background:var(--panel);padding:16px}
+.cell h3{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--em)}
+.cell p{color:var(--dim);font-size:12.5px}
+.cell code{color:var(--ink);background:var(--panel2);padding:1px 5px;border-radius:2px;font-size:12px}
+.refuse{margin-top:8px;border:1px solid var(--line);border-radius:3px;background:var(--panel)}
+.refuse div{display:grid;grid-template-columns:150px 1fr;gap:12px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:12.5px}
+.refuse div:last-child{border-bottom:0}
+.refuse span{color:var(--bad);letter-spacing:.06em;font-size:11px;text-transform:uppercase;padding-top:2px}
+/* proof */
+.proof{border:1px solid var(--line);border-radius:3px;background:var(--panel);padding:18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+.proof h2{font-size:18px;font-weight:600}
+.proof p{color:var(--dim);font-size:12.5px;margin-top:4px;max-width:70ch}
+.proof .adr{display:grid;gap:5px;margin-top:12px;font-size:12.5px}
+.proof .adr div{display:flex;gap:10px;flex-wrap:wrap}
+.proof .adr span{color:var(--dim);width:110px}
+.proof .adr a{word-break:break-all}
+.proof .adr a:hover{text-decoration:underline}
+.proof .ca{word-break:break-all}
+.proof .ca.soon{font-size:28px;font-weight:600;color:var(--em)}
+.proof .acts{display:grid;gap:6px;margin:0}
+footer{padding:22px 0 44px;color:var(--dim);font-size:12px;border-top:1px solid var(--line);margin-top:16px}
+footer .in{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.md{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6);display:none;place-items:center;padding:16px}
+.md.on{display:grid}
+.mdin{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:16px;width:min(360px,100%);display:grid;gap:6px}
+.mdin button{display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;border:1px solid var(--line);border-radius:3px;background:var(--bg);cursor:pointer;text-align:left}
+.mdin button img{width:20px;height:20px;border-radius:3px}
+@media (max-width:860px){.stations{grid-template-columns:1fr 1fr}.how{grid-template-columns:1fr}.proof,.finish{grid-template-columns:1fr}.top nav{display:none}.hud{grid-template-columns:1fr 1fr}.hud div:nth-child(2){border-right:0}.row{grid-template-columns:40px 1fr 70px}.row .t{display:none}.refuse div{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <a class="logo" href="/"><i></i><span data-name>AI Labyrinth</span></a>
+  <nav><a href="#play">Play</a><a href="#stations">Stations</a><a href="#hall">Hall</a><a href="#how">How</a><a href="/docs">Docs</a></nav>
+  <span class="sp"></span>
+  <a class="btn" data-link="x" href="https://x.com/soon" aria-label="X"><img src="/assets/x.svg" alt="X"></a>
+  <button class="btn" id="connect">Connect wallet</button>
+</div></header>
+
+<main class="in">
+<div class="hero">
+  <div class="kicker">The maze is in the contract. The contract grades the run.</div>
+  <h1>The path AI walked, as a <em>labyrinth</em> the chain checks</h1>
+  <p class="lead">A first-person maze with one way through. Along it, twelve stations: <b>1950</b> Turing asks the question, <b>1956</b> Dartmouth names the field, <b>1997</b> Deep Blue, <b>2017</b> the transformer, <b>2022</b> ChatGPT. The map and the stations live in a contract on Robinhood Chain. Your browser reads them out of chain state, you walk, and every cell you cross is a move. At the exit you hand the moves to the contract: it walks them over its own map, refuses a step into a wall or a station out of order, and records you.</p>
+  <div class="acts"><a class="btn em" href="#play">Enter the labyrinth</a><a class="btn" href="#how">How it works</a></div>
+  <div class="strip"><span class="k" data-ticker>$AIMAZE</span><span class="k">contract</span><span class="v" id="ca-strip">soon</span><span class="sp"></span><button class="btn" id="copy" style="height:28px">Copy</button><a class="btn" id="ca-explorer" target="_blank" rel="noopener" style="height:28px" hidden>explorer ↗</a></div>
+</div>
+
+<section id="play">
+  <div class="h"><h2>The labyrinth</h2><small id="p-note">31 × 31 cells, one path, twelve stations</small><span class="sp"></span><span class="src" id="src">reading…</span></div>
+  <div class="game"><canvas id="cv" aria-label="The labyrinth, first person"></canvas>
+    <div class="hud"><div>stations<b id="h-st" class="em">0 / 12</b></div><div>moves<b id="h-steps">0</b></div><div>time<b id="h-time">0:00</b></div><div>next<b id="h-next">—</b></div></div>
+  </div>
+  <div class="gtools"><span>W A S D move and turn · Q E strafe · mouse look · on a phone, left half moves and right half turns</span><span class="sp"></span><button class="btn" id="mute" style="height:28px">sound on</button><button class="btn" id="restart" style="height:28px">restart</button></div>
+  <div class="finish" id="finish" hidden>
+    <div><h3>Exit reached</h3><p id="f-sum"></p><div class="msg" id="f-msg"></div></div>
+    <div class="acts"><button class="btn" id="ask">Ask the chain</button><button class="btn em" id="submit">Submit the run</button></div>
+  </div>
+</section>
+
+<section id="stations">
+  <div class="h"><h2>Stations</h2><small>in the order the path passes them</small></div>
+  <div class="stations" id="st-list"></div>
+</section>
+
+<section id="hall">
+  <div class="h"><h2>Hall</h2><small>everyone the contract has let out</small></div>
+  <div class="rec" id="rec"></div>
+  <div class="hall" id="hall"><div class="empty">reading the chain…</div></div>
+</section>
+
+<section id="how">
+  <div class="h"><h2>How it works</h2></div>
+  <div class="how">
+    <div class="cell"><h3>Map</h3><p>31 × 31 cells, one byte each, 961 bytes in contract storage. Carved by a seeded backtracker, so the maze is perfect: exactly one path from the entrance to the exit, no loops. The twelve stations sit on that path, spaced along it, which is why they can only be reached in order.</p></div>
+    <div class="cell"><h3>Moves</h3><p>Each cell you cross is one byte: <code>0</code> up, <code>1</code> right, <code>2</code> down, <code>3</code> left. Wandering into dead ends adds moves. The clean solution is <span id="how-sol">260</span> moves; fewer is impossible.</p></div>
+    <div class="cell"><h3>Judge</h3><p><code>verify(moves)</code> walks the bytes over the stored map inside the EVM and returns whether it finished, how many steps, how many stations were passed and where it stopped. <code>submit(moves)</code> records a finish and a personal best; the fewest steps by anyone is the record. Nothing else is stored.</p></div>
+  </div>
+  <div class="refuse">
+    <div><span>wall</span><b>A step into a wall or off the edge ends the walk there. The contract tells you the cell.</b></div>
+    <div><span>order</span><b>A run that reaches the exit having skipped a station is not a finish. In a perfect maze this cannot happen by walking; it only happens if the moves are forged.</b></div>
+    <div><span>teleport</span><b>Every run starts at the entrance. A run that begins somewhere else walks into a wall on its first move.</b></div>
+    <div><span>length</span><b>More than 6,000 moves is refused. The clean path is 260.</b></div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="proof">
+    <div>
+      <h2>Proof</h2>
+      <p>One contract, no owner, no setters, nothing to withdraw. The map cannot change after deployment. Tested on a fork of Robinhood Chain mainnet: the solution verifies, a detour verifies with more steps, a step into a wall, off the edge, a skipped first move, an empty run and a run over 6,000 moves are all refused, personal bests and the record update the way the docs say.</p>
+      <div class="adr">
+        <div><span>labyrinth</span><a id="p-lab" target="_blank" rel="noopener">not deployed yet</a></div>
+        <div><span>chain</span><a href="https://robinhoodchain.blockscout.com" target="_blank" rel="noopener">Robinhood Chain · 4663</a></div>
+        <div><span data-ticker>$AIMAZE</span><span class="ca soon" id="ca">soon</span></div>
+      </div>
+    </div>
+    <div class="acts">
+      <a class="btn em" data-link="pons" target="_blank" rel="noopener"><img src="/assets/pons.png" alt="">Buy on Pons</a>
+      <a class="btn" data-link="dex" target="_blank" rel="noopener">Chart</a>
+      <a class="btn" href="/docs">Docs</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer><div class="in"><span><b data-name>AI Labyrinth</b> · Robinhood Chain · Pons</span><span>The dates are history. The coin is a coin. Nothing here is advice.</span></div></footer>
+<div class="md" id="md"><div class="mdin"><h3 style="font-size:13px;margin-bottom:4px">Choose a wallet</h3><div id="wl"></div></div></div>
+
+<script type="module">
+import * as W from '/lib/wallet.js';
+import { explorer } from '/lib/chains.js';
+import * as L from '/lib/labyrinth.js';
+import { mount } from '/lib/game.js';
+const $ = id => document.getElementById(id);
+const S = window.SITE, CA = (S.CA || 'SOON').trim(), HAS = /^0x[0-9a-fA-F]{40}$/.test(CA);
+const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const link = (kind, v, txt) => `<a href="${explorer(L.CHAIN, kind, v)}" target="_blank" rel="noopener">${txt || v}</a>`;
+document.querySelectorAll('[data-name]').forEach(e => e.textContent = S.NAME);
+document.querySelectorAll('[data-ticker]').forEach(e => e.textContent = S.TICKER);
+document.querySelectorAll('[data-link="x"]').forEach(a => a.href = S.X_URL || 'https://x.com/soon');
+document.querySelectorAll('[data-link="pons"]').forEach(a => a.href = HAS ? window.PONS_HOME + '/' + CA : window.PONS_HOME);
+document.querySelectorAll('[data-link="dex"]').forEach(a => a.href = HAS ? window.DEX_HOME + '/' + CA : window.DEX_HOME);
+if (HAS) { $('ca').textContent = CA; $('ca').classList.remove('soon'); $('ca-strip').textContent = CA; $('ca-explorer').hidden = false; $('ca-explorer').href = explorer(L.CHAIN, 'token', CA); }
+$('copy').onclick = () => { $('copy').textContent = HAS ? (navigator.clipboard && navigator.clipboard.writeText(CA), 'copied') : 'not yet'; setTimeout(() => $('copy').textContent = 'Copy', 1200); };
+if (L.LABYRINTH) $('p-lab').outerHTML = link('address', L.LABYRINTH);
+
+/* wallet */
+function paintWallet() { const w = W.state(); $('connect').textContent = w.address ? W.short(w.address) : 'Connect wallet'; }
+$('connect').onclick = async () => {
+  if (W.state().address) { W.disconnect(); return; }
+  const list = W.wallets();
+  if (list.length <= 1) return W.connect(list[0] && list[0].id).then(paintWallet).catch(e => alert(e.shortMessage || e.message));
+  $('wl').innerHTML = list.map(w => `<button data-id="${w.id}">${w.icon ? `<img src="${w.icon}" alt="">` : ''}${w.name}</button>`).join('');
+  $('md').classList.add('on');
+};
+$('wl').onclick = e => { const b = e.target.closest('button'); if (!b) return; $('md').classList.remove('on'); W.connect(b.dataset.id).then(paintWallet).catch(err => alert(err.shortMessage || err.message)); };
+$('md').onclick = e => { if (e.target === $('md')) $('md').classList.remove('on'); };
+W.onChange(paintWallet); W.restore().then(paintWallet);
+
+/* the board and the game */
+let BOARD = null, G = null, RESULT = null, muted = false;
+function paintStations(reached = 0) {
+  $('st-list').innerHTML = BOARD.labels.map((l, i) => `<div class="st ${i < reached ? 'on' : ''}"><div class="y">${esc(l.slice(0, 4))}</div><div class="t">${esc(l.slice(5))}</div><div class="n">${esc(BOARD.notes[i] || '')}</div><div class="c">${i < reached ? 'reached' : 'cell ' + BOARD.checkpoints[i]}</div></div>`).join('');
+  $('h-next').textContent = reached < BOARD.labels.length ? BOARD.labels[reached].slice(0, 4) : 'exit';
+}
+function startGame() {
+  if (G) G.destroy();
+  RESULT = null; $('finish').hidden = true; $('f-msg').textContent = '';
+  $('h-st').textContent = '0 / ' + BOARD.labels.length; $('h-steps').textContent = '0'; $('h-time').textContent = '0:00';
+  paintStations(0);
+  G = mount($('cv'), BOARD, {
+    onStep: s => { $('h-steps').textContent = s.steps; },
+    onStation: i => { $('h-st').textContent = (i + 1) + ' / ' + BOARD.labels.length; paintStations(i + 1); },
+    onFinish: s => { RESULT = s; $('finish').hidden = false; $('f-sum').textContent = `${s.steps} moves, ${L.clock(s.seconds)}, ${s.reached} of ${BOARD.labels.length} stations. The clean path is ${BOARD.solution || 260} moves.`; $('ask').disabled = !L.LABYRINTH; $('submit').disabled = !L.LABYRINTH; if (!L.LABYRINTH) { $('f-msg').className = 'msg warn'; $('f-msg').textContent = 'The contract is not deployed yet, so the chain cannot grade this run. The moves are recorded all the same.'; } }
+  });
+  G.mute(muted);
+  if (location.search.includes('dev')) window.__G = G;
+  const tick = setInterval(() => { if (!G) return clearInterval(tick); const s = G.summary(); if (s.seconds && !s.done) $('h-time').textContent = L.clock(s.seconds); }, 500);
+}
+$('restart').onclick = startGame;
+$('mute').onclick = () => { muted = !muted; $('mute').textContent = muted ? 'sound off' : 'sound on'; G && G.mute(muted); };
+$('ask').onclick = async () => {
+  const m = $('f-msg'); m.className = 'msg'; m.textContent = 'asking verify() on chain…';
+  try { const r = await L.askChain(RESULT.moves); m.className = 'msg ' + (r.ok ? 'ok' : 'bad'); m.textContent = r.ok ? `the chain says: finished, ${r.steps} steps, ${r.reached} stations` : `the chain says: not a finish. stopped at cell ${r.stopped} after ${r.steps} steps, ${r.reached} stations`; }
+  catch (e) { m.className = 'msg bad'; m.textContent = e.shortMessage || e.message; }
+};
+$('submit').onclick = async () => {
+  const m = $('f-msg');
+  try { $('submit').disabled = true; m.className = 'msg'; m.textContent = 'confirm in wallet…'; const tx = await W.send(L.CHAIN, { address: L.LABYRINTH, abi: L.ABI, functionName: 'submit', args: [L.movesHex(RESULT.moves)] }); m.innerHTML = `sent · ${link('tx', tx.hash, 'view')} · waiting…`; const rc = await tx.wait(); if (rc.status !== 'success') throw Error('Transaction failed'); m.className = 'msg ok'; m.textContent = 'recorded. you are in the hall.'; hall(); }
+  catch (e) { m.className = 'msg bad'; m.textContent = e.shortMessage || e.message; $('submit').disabled = false; }
+};
+async function hall() {
+  try {
+    const runs = await L.loadRuns(50);
+    const b = BOARD;
+    $('rec').innerHTML = b.source === 'chain' ? `<span>finishes <b>${b.nRuns}</b></span><span>record <b>${b.record || '—'}</b> moves${b.holder ? ' by <b>' + W.short(b.holder) + '</b>' : ''}</span><span>clean path <b>${b.solution || 260}</b></span>` : '';
+    $('hall').innerHTML = runs.length ? `<div class="row head"><span>#</span><span>runner</span><span class="steps">moves</span><span class="t">when</span></div>` + runs.map(r => `<div class="row"><span>${r.index + 1}</span><span class="${r.steps === b.record ? 'r' : ''}">${link('address', r.runner, W.short(r.runner))}</span><span class="steps">${r.steps}</span><span class="t">${L.ago(r.time)}</span></div>`).join('') : `<div class="empty">${L.LABYRINTH ? 'nobody has come out yet' : 'the contract is not deployed yet'}</div>`;
+  } catch (e) { $('hall').innerHTML = `<div class="empty">could not read the chain: ${esc(e.shortMessage || e.message)}</div>`; }
+}
+try {
+  BOARD = await L.loadBoard();
+  const local = await fetch('/assets/maze.json').then(r => r.json()); BOARD.solution = local.solutionMoves; $('how-sol').textContent = local.solutionMoves;
+  $('src').textContent = BOARD.source === 'chain' ? 'read from the contract' : 'read from a local copy, contract not deployed';
+  $('src').className = 'src ' + (BOARD.source === 'chain' ? 'chain' : '');
+  startGame(); hall();
+} catch (e) { $('src').textContent = 'could not read the board: ' + (e.shortMessage || e.message); }
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="/config.js"></script>
+<title>AI Labyrinth · docs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="How AI Labyrinth works: the maze in the contract, the twelve stations, the move format, the judge, and what it refuses.">
+<link rel="icon" href="/assets/favicon.png">
+<style>
+:root{--bg:#080b09;--panel:#0d1210;--line:#1d2a22;--ink:#e8f3ea;--dim:#7f9486;--em:#3ddc7a;--m:ui-monospace,"SF Mono","Cascadia Mono","DejaVu Sans Mono",Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.65 var(--m);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.top{position:sticky;top:0;z-index:20;background:rgba(8,11,9,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .in{width:min(1080px,100%);margin:0 auto;padding:0 clamp(16px,3vw,28px);display:flex;align-items:center;gap:18px;height:52px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;text-decoration:none}
+.logo i{width:14px;height:14px;border:2px solid var(--em);border-radius:2px;display:block;position:relative}
+.logo i:after{content:"";position:absolute;left:3px;top:3px;width:4px;height:4px;background:var(--em)}
+.top a.l{color:var(--dim);font-size:12.5px;text-decoration:none}
+.page{width:min(1080px,100%);margin:0 auto;padding:0 clamp(16px,3vw,28px);display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;align-items:start}
+nav.toc{position:sticky;top:76px;padding:30px 0}
+nav.toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--line)}
+nav.toc a{display:block;padding:4px 0 4px 12px;margin-left:-1px;border-left:2px solid transparent;color:var(--dim);text-decoration:none;font-size:12.5px}
+nav.toc a.on{color:var(--em);border-left-color:var(--em)}
+main{padding:30px 0 80px;min-width:0}
+h1{margin:0 0 8px;font-size:clamp(28px,4vw,42px);letter-spacing:-.02em;line-height:1.1;font-weight:600}
+.lede{color:var(--dim);max-width:64ch;margin:0 0 24px;font-size:14.5px}
+section{scroll-margin-top:76px;padding:22px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0;padding-top:0}
+h2{margin:0 0 10px;font-size:20px;letter-spacing:-.01em;font-weight:600}
+h3{margin:16px 0 6px;font-size:13px;font-weight:600;color:var(--em)}
+p{margin:0 0 10px;max-width:70ch;color:#c9d6cc}
+ul{margin:0 0 10px;padding-left:18px;max-width:70ch;color:#c9d6cc}
+li{margin-bottom:4px}
+.kv{border:1px solid var(--line);border-radius:3px;background:var(--panel);margin:10px 0;max-width:720px}
+.kv div{display:flex;justify-content:space-between;gap:14px;padding:8px 12px;border-bottom:1px solid var(--line);font-size:12.5px}
+.kv div:last-child{border-bottom:0}
+.kv span{color:var(--dim)}
+.kv b{font-weight:400;text-align:right;word-break:break-word}
+pre{font:12.5px/1.6 var(--m);background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:12px;overflow-x:auto;margin:10px 0;color:#c9d6cc}
+code{color:var(--em)}
+@media (max-width:820px){.page{grid-template-columns:1fr}nav.toc{position:static;padding:18px 0 0}nav.toc ol{display:flex;flex-wrap:wrap;gap:4px;border:0}nav.toc a{border:1px solid var(--line);padding:3px 9px;margin:0}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><a class="logo" href="/"><i></i><span data-name>AI Labyrinth</span></a><a class="l" href="/#play">Play</a><a class="l" href="/docs" style="color:var(--ink)">Docs</a></div></header>
+<div class="page">
+<nav class="toc"><ol><li><a href="#what">What it is</a></li><li><a href="#maze">The maze</a></li><li><a href="#stations">The stations</a></li><li><a href="#moves">Moves</a></li><li><a href="#judge">The judge</a></li><li><a href="#refuse">What it refuses</a></li><li><a href="#hall">The hall</a></li><li><a href="#engine">The engine</a></li><li><a href="#contract">Contract</a></li><li><a href="#token">$AIMAZE</a></li></ol></nav>
+<main>
+<h1>How AI Labyrinth works</h1>
+<p class="lede">A maze with one way through, whose stations are the history of artificial intelligence, stored in a contract on Robinhood Chain that also grades every run.</p>
+
+<section id="what"><h2>What it is</h2>
+<p>The site does not hold the maze. A contract does: 961 bytes of map, the entrance, the exit, and twelve station cells with their labels. Your browser reads those bytes out of chain state and renders them as corridors. You walk. Each cell you cross is one move. When you reach the exit, you hand the list of moves to the contract, and the contract walks the same map with the same rules and decides whether that was a finish.</p>
+</section>
+
+<section id="maze"><h2>The maze</h2>
+<div class="kv"><div><span>grid</span><b>31 × 31 cells, 1 byte each, 0 open and 1 wall</b></div><div><span>generator</span><b>recursive backtracker, seed 1956</b></div><div><span>kind</span><b>perfect: one path between any two cells, no loops</b></div><div><span>entrance</span><b>cell 32, top left</b></div><div><span>exit</span><b>cell 928, bottom right</b></div><div><span>clean path</span><b>261 cells, 260 moves</b></div></div>
+<p>Because the maze is perfect, the path from the entrance to the exit is unique. The stations are placed on that path, spaced along it, so any walk that reaches the exit has passed every station, in order. Dead ends only add moves.</p>
+</section>
+
+<section id="stations"><h2>The stations</h2>
+<div class="kv">
+<div><span>1950</span><b>Turing asks the question. Computing Machinery and Intelligence, the imitation game</b></div>
+<div><span>1956</span><b>Dartmouth gives it a name. McCarthy, Minsky, Shannon, Rochester; 7,500 dollars for a summer</b></div>
+<div><span>1958</span><b>The perceptron learns. Rosenblatt's machine adjusts its own weights</b></div>
+<div><span>1966</span><b>ELIZA answers back. Weizenbaum's script that people confided in</b></div>
+<div><span>1973</span><b>The Lighthill report. Funding cut; the first winter begins</b></div>
+<div><span>1986</span><b>Backpropagation spreads. Rumelhart, Hinton, Williams; deep nets can be trained</b></div>
+<div><span>1997</span><b>Deep Blue beats Kasparov. A machine wins a chess match against the world champion</b></div>
+<div><span>2012</span><b>AlexNet wins ImageNet. A GPU-trained convolutional net halves the error rate</b></div>
+<div><span>2016</span><b>AlphaGo beats Lee Sedol. Four games to one; move 37</b></div>
+<div><span>2017</span><b>Attention is all you need. The transformer; every large model since is one</b></div>
+<div><span>2020</span><b>GPT-3. 175 billion parameters; few-shot prompting</b></div>
+<div><span>2022</span><b>ChatGPT. A hundred million people talk to a model in two months</b></div>
+</div>
+<p>The year and the title are on chain as the station label. The one-line notes live only on the site.</p>
+</section>
+
+<section id="moves"><h2>Moves</h2>
+<pre>0  up      cell - 31
+1  right   cell + 1
+2  down    cell + 31
+3  left    cell - 1</pre>
+<p>The engine records a move every time your position crosses into a neighbouring cell. Corridors are one cell wide, so a crossing is always to one of the four neighbours. The moves are sent as bytes in calldata: a clean run is 260 bytes, a wandering one a few thousand.</p>
+</section>
+
+<section id="judge"><h2>The judge</h2>
+<pre>verify(bytes moves) view returns (bool ok, uint32 steps, uint8 reached, uint16 stopped)
+submit(bytes moves) returns (uint256 index)</pre>
+<p><code>verify</code> starts at the entrance and applies each move. A move off the grid, into a wall or with an unknown code ends the walk and returns where it stopped. Each time the current cell is the next station, the station counter advances. The walk is a finish only if all twelve stations were counted and the last cell is the exit. It is a view: the site calls it before sending anything, so you see the verdict for free.</p>
+<p><code>submit</code> calls <code>verify</code> and reverts with <code>Rejected(steps, reached, stopped)</code> if it is not a finish. Otherwise it appends a run, counts a finish for the sender, updates their personal best if fewer steps, and the record if fewer than anyone.</p>
+<div class="kv"><div><span>gas per submit</span><b>about 264,000 on the fork, for a 262 move run</b></div><div><span>max moves</span><b>6,000</b></div><div><span>who can submit</span><b>anyone, for their own wallet</b></div></div>
+</section>
+
+<section id="refuse"><h2>What it refuses</h2>
+<ul><li>An empty run, or one over 6,000 moves.</li><li>A step off the grid or into a wall: the walk stops there and <code>stopped</code> names the cell.</li><li>A run that ends anywhere but the exit.</li><li>A run that reaches the exit with a station missing. In a perfect maze this cannot happen by walking; only by forging the bytes.</li><li>A run that does not begin at the entrance. Every run does, by definition: the first move is applied from the entrance cell.</li></ul>
+</section>
+
+<section id="hall"><h2>The hall</h2>
+<p>The site lists the last fifty runs straight from the contract, the record, and the number of finishes. There is no server between you and that list.</p>
+</section>
+
+<section id="engine"><h2>The engine</h2>
+<p>A raycaster in plain JavaScript on a canvas. The wall textures are arithmetic, the plaques are text drawn on the fly, the sounds are synthesized. There are no asset files. On a desktop, click the view to capture the mouse; W A S D move and turn, Q E strafe. On a phone, the left half of the view moves and the right half turns. The minimap shows only the cells you have walked.</p>
+</section>
+
+<section id="contract"><h2>Contract</h2>
+<pre>Labyrinth   map, entrance, exit, stations; verify, submit, runs, board
+            no owner, no setters, nothing to withdraw</pre>
+<p>Tested against a fork of Robinhood Chain mainnet: a maze whose entrance is a wall is refused at deployment; the solution verifies; a detour verifies with two more steps; one step short, a step into a wall, off the edge, an unknown move, an empty run, a run starting at the second cell and a run over 6,000 moves are refused; a first finish sets the record; a shorter run takes it; a tie is a personal best but not a record; a rejected submit carries the reason.</p>
+</section>
+
+<section id="token"><h2>$AIMAZE</h2>
+<p>An ordinary Pons coin on Robinhood Chain. It has no rights over the labyrinth.</p>
+<div class="kv"><div><span>chain</span><b>Robinhood Chain</b></div><div><span>launchpad</span><b>Pons</b></div><div><span>contract</span><b id="ca">soon</b></div></div>
+</section>
+</main>
+</div>
+<script>
+document.querySelectorAll('[data-name]').forEach(e => e.textContent = window.SITE.NAME);
+const CA = (window.SITE.CA || 'SOON').trim(); if (/^0x[0-9a-fA-F]{40}$/.test(CA)) document.getElementById('ca').textContent = CA;
+const links = [...document.querySelectorAll('nav.toc a')], secs = links.map(a => document.querySelector(a.getAttribute('href')));
+const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id)); }); }, { rootMargin: '-30% 0px -60% 0px' });
+secs.forEach(s => s && io.observe(s));
+</script>
+</body>
+</html>

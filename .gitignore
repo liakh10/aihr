@@ -1,0 +1,4 @@
+node_modules/
+contracts/node_modules/
+.env.local
+.vercel

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script src="/config.js"></script>
+<title>Deploy · AI Labyrinth</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/favicon.png">
+<style>
+:root{--bg:#080b09;--panel:#0d1210;--line:#1d2a22;--ink:#e8f3ea;--dim:#7f9486;--em:#3ddc7a;--bad:#ff7b66;--m:ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:13.5px/1.6 var(--m);padding:clamp(16px,4vw,48px)}
+.in{width:min(820px,100%);margin:0 auto}
+h1{font-size:clamp(24px,4vw,36px);letter-spacing:-.02em;font-weight:600}
+h1 em{font-style:normal;color:var(--em)}
+h2{font-size:14px;margin-bottom:4px;font-weight:600}
+.dim{color:var(--dim)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:3px;padding:16px;margin-top:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{height:36px;padding:0 14px;border-radius:3px;border:1px solid var(--line);background:var(--bg);font:inherit;color:inherit;cursor:pointer;white-space:nowrap}
+.btn.em{background:var(--em);color:#06200f;border-color:var(--em);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.st{word-break:break-all;font-size:12.5px}
+.ok{color:var(--em)}.bad{color:var(--bad)}
+pre{font:12px/1.6 var(--m);background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:12px;margin-top:10px;white-space:pre-wrap;word-break:break-all}
+a{color:var(--em)}
+</style>
+</head>
+<body><div class="in">
+  <h1>Deploy <em>AI Labyrinth</em></h1>
+  <p class="dim" style="margin-top:8px">One contract on Robinhood Chain. The constructor takes the maze from assets/maze.json: 961 bytes of map, the entrance, the exit, twelve station cells and their labels. The deploying wallet gets no rights: there is no owner.</p>
+  <div class="card"><div class="row"><button class="btn em" id="connect">Connect wallet</button><span id="who" class="dim"></span></div></div>
+  <div class="card"><h2>The maze that will be deployed</h2><pre id="mz">reading assets/maze.json…</pre></div>
+  <div class="card"><h2>Deploy Labyrinth</h2><div class="row"><button class="btn" data-step="lab" disabled>Deploy</button><span class="st dim" id="s-lab"></span></div></div>
+  <div class="card"><h2>config.js</h2><p class="dim">Paste this into config.js and push, the site reads it with no cache</p><pre id="out">connect to see the address</pre></div>
+</div>
+<script type="module">
+import * as W from '/lib/wallet.js';
+import { explorer } from '/lib/chains.js';
+import { encodeDeployData } from 'https://cdn.jsdelivr.net/npm/viem@2.21.55/+esm';
+const $ = id => document.getElementById(id), CHAIN = 4663;
+const [LB, M] = await Promise.all([fetch('/lib/abi/Labyrinth.json?v=1').then(r => r.json()), fetch('/assets/maze.json').then(r => r.json())]);
+const labels = M.stations.map(s => s.year + ' ' + s.title);
+$('mz').textContent = `${M.w} x ${M.h} · seed ${M.seed} · entrance ${M.start} · exit ${M.exit} · ${M.solutionMoves} clean moves\nstations ${M.checkpoints.join(' ')}\n${labels.join('\n')}`;
+let S = {}; try { S = JSON.parse(localStorage.getItem('aimaze:deploy') || '{}'); } catch {}
+const save = () => { try { localStorage.setItem('aimaze:deploy', JSON.stringify(S)); } catch {} };
+const link = (kind, v) => `<a href="${explorer(CHAIN, kind, v)}" target="_blank" rel="noopener">${v}</a>`;
+async function wait(el, tx) { el.innerHTML = `sent · ${link('tx', tx.hash)} · waiting…`; const rc = await tx.wait(); if (rc.status !== 'success') throw Error('Transaction failed'); return rc; }
+async function paint() {
+  const w = W.state();
+  $('who').textContent = w.address ? W.short(w.address) + ' · chain ' + (w.chainId || '?') : '';
+  document.querySelectorAll('[data-step]').forEach(b => b.disabled = !w.address);
+  if (S.lab) $('s-lab').innerHTML = link('address', S.lab);
+  $('out').textContent = 'window.AIMAZE_LABYRINTH = "' + (S.lab || '') + '";';
+}
+const steps = {
+  lab: async el => {
+    if (S.lab && !confirm('A labyrinth is already deployed from this browser. Deploy another?')) return;
+    el.textContent = 'confirm in wallet…';
+    const data = encodeDeployData({ abi: LB.abi, bytecode: LB.bytecode, args: [M.w, M.h, M.start, M.exit, M.map, M.checkpoints, labels] });
+    const rc = await wait(el, await W.sendTx(CHAIN, { data }));
+    S.lab = rc.contractAddress;
+  }
+};
+document.querySelectorAll('[data-step]').forEach(b => b.onclick = async () => { const k = b.dataset.step, el = $('s-' + k); b.disabled = true; try { await steps[k](el); save(); } catch (e) { el.innerHTML = '<span class="bad">' + (e.shortMessage || e.message || e) + '</span>'; } await paint(); });
+$('connect').onclick = () => W.connect().then(paint).catch(e => alert(e.shortMessage || e.message));
+W.onChange(paint); W.restore().then(paint);
+</script>
+</body>
+</html>
